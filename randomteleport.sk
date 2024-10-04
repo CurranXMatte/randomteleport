@@ -1,0 +1,28 @@
+command /randomtp:
+    trigger:
+        set {_radius} to 500
+        set {_randomx} to random integer between -500 and 500
+        set {_randomz} to random integer between -500 and 500
+        send "Generato X: %{_randomx}%, Z: %{_randomz}%" to player
+        set {_world} to world of player
+
+        loop 256 times:
+            set {_y} to 256 - loop-number
+            set {_block} to block at location({_randomx}, {_y}, {_randomz}, {_world})
+
+            if {_block} is solid:
+                if {_block} is not water:
+                    if {_block} is not lava:
+                        if {_y} >= 63:
+                            stop loop
+
+        if {_y} is not set:
+            set {_y} to 64
+        if {_y} < 63:
+            set {_y} to 64
+
+        set {_randomx} to round {_randomx}
+        set {_randomz} to round {_randomz}
+        set {_y} to round {_y} + 1
+        execute console command "minecraft:tp %player% %{_randomx}% %{_y}% %{_randomz}%"
+        send "&aTeleported at &2%{_randomx}% &2%{_y}% &2%{_randomz}%" to player
